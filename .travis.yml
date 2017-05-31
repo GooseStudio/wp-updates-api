@@ -1,4 +1,3 @@
-
 language: php
 
 sudo: false
@@ -16,14 +15,11 @@ matrix:
       env: DEPENDENCIES='normal'
 
 before_install:
-  - phpenv config-rm xdebug.ini || true
+  - phpenv config-rm xdebug.ini
 
 install:
   - if [ "$DEPENDENCIES" != "low" ]; then composer update; fi;
   - if [ "$DEPENDENCIES" == "low" ]; then composer update --prefer-lowest; fi;
-
-before_script:
-  - travis_retry composer install --prefer-source --no-interaction
 
 script:
   - bin/phpspec run --config=phpspec.yml --no-interaction
