@@ -4,7 +4,6 @@ namespace spec\GooseStudio\WpUpdatesAPI;
 
 use GooseStudio\WpUpdatesAPI\WpUpdatesAPI;
 use PhpSpec\ObjectBehavior;
-use Prophecy\Argument;
 
 /**
  * Class WpUpdatesAPISpec
