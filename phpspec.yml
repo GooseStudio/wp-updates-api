@@ -1,0 +1,4 @@
+suites:
+  WpUpdatesAPI:
+    namespace: GooseStudio\WpUpdatesAPI
+    psr4_prefix: GooseStudio\WpUpdatesAPI
