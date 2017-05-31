@@ -26,6 +26,7 @@ class WpUpdatesAPI {
 	}
 
 	/**
+	 * Rertieves latest version number for a plugin or a theme.
 	 * @param string $extension_name
 	 *
 	 * @return string
@@ -51,6 +52,8 @@ class WpUpdatesAPI {
 	}
 
 	/**
+	 * Checks if a license key is valid
+	 *
 	 * @param string $extension_name
 	 * @param string $license_key
 	 *
@@ -68,6 +71,8 @@ class WpUpdatesAPI {
     }
 
 	/**
+	 * Retrieves the data that is connected with plugin/theme and license key.
+	 *
 	 * @param string $extension_name
 	 * @param string $license_key
 	 *
@@ -83,6 +88,15 @@ class WpUpdatesAPI {
 	    throw new WpUpdatesAPIException( $response->body, $response->status_code );
     }
 
+	/**
+	 * Register license for the provided site url
+	 * @param string $extension_name The plugin or theme that the license belongs to
+	 * @param string $license_key The license key to use
+	 * @param string $url The url to register the license to
+	 *
+	 * @return array|mixed|object
+	 * @throws WpUpdatesAPIException
+	 */
     public function register_license_key(string $extension_name, string $license_key, string $url)
     {
 	    $headers     = [ 'Accept' => 'application/json' ];
