@@ -61,16 +61,16 @@ class WpUpdatesAPISpec extends ObjectBehavior {
 			'status'             => 'expired',
 			'expiration_date'    => '2017-08-18',
 			'license_key_holder' => 'Widgets Inc',
-			'licensed_sites'           => 3,
-			'sites_count'           => 2,
+			'licensed_sites_limit'     => 3,
+			'licensed_sites_count'           => 2,
 		] );
 		$this->beConstructedWith( 'https://example.com/wp_updates_api/v1/', [ 'transport' => $transport ] );
 		$this->get_license_key_data( 'plugin_name', 'abcdef' )->shouldBe( [
 				'status'             => 'expired',
 				'expiration_date'    => '2017-08-18',
 				'license_key_holder' => 'Widgets Inc',
-				'licensed_sites'           => 3,
-				'sites_count'           => 2,
+				'licensed_sites_limit'     => 3,
+				'licensed_sites_count'           => 2,
 			]
 		);
 	}
@@ -83,8 +83,8 @@ class WpUpdatesAPISpec extends ObjectBehavior {
 			'expiration_date'    => '2017-08-18',
 			'license_key_holder' => 'Widgets Inc',
 			'site' => 'https://example.org/',
-			'licensed_sites'           => 3,
-			'sites_count'           => 2,
+			'licensed_sites_limit'           => 3,
+			'licensed_sites_count'           => 2,
 			'registered_site' => 'https://example.org/'
 		] );
 		$this->beConstructedWith( 'https://example.com/wp_updates_api/v1/', [ 'transport' => $transport ] );
@@ -93,8 +93,8 @@ class WpUpdatesAPISpec extends ObjectBehavior {
 				'expiration_date'    => '2017-08-18',
 				'license_key_holder' => 'Widgets Inc',
 				'site' => 'https://example.org/',
-				'licensed_sites'           => 3,
-				'sites_count'           => 2,
+				'licensed_sites_limit'           => 3,
+				'licensed_sites_count'           => 2,
 				'registered_site' => 'https://example.org/'
 				]
 		);
