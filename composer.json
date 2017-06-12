@@ -15,7 +15,8 @@
     "symfony/event-dispatcher": "^2.7 || ^3.0",
     "symfony/process": "^2.7 || ^3.0",
     "symfony/finder": "^2.7 || ^3.0",
-    "symfony/yaml": "^2.7 || ^3.0"
+    "symfony/yaml": "^2.7 || ^3.0",
+    "php-mock/php-mock-prophecy": "^0.0.2"
   },
   "license": "MIT",
   "authors": [
