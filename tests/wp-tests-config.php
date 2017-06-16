@@ -28,19 +28,17 @@ define( 'DB_COLLATE', '' );
 $table_prefix = 'wptests_';   // Only numbers, letters, and underscores please!
 
 
-if (file_exists(__DIR__ . '/config.php')) {
+if ( file_exists( __DIR__ . '/config.php' ) ) {
 	require __DIR__ . '/config.php';
 }
-defined('DB_PASS') or define( 'DB_PASS', '' );
+defined( 'DB_PASSWORD' ) or define( 'DB_PASSWORD', '' );
 
 $_tests_dir = getenv( 'WP_TESTS_DIR' );
 if ( ! $_tests_dir ) {
 	$_tests_dir = '/tmp/wordpress/';
-	if (!defined('WP_TESTS_DIR'))
-		define( 'WP_TESTS_DIR', $_tests_dir );
-} else {
-	if (!defined('WP_TESTS_DIR'))
-		define( 'WP_TESTS_DIR', $_tests_dir );
+}
+if ( ! defined( 'WP_TESTS_DIR' ) ) {
+	define( 'WP_TESTS_DIR', $_tests_dir );
 }
 /* Path to the WordPress codebase you'd like to test. Add a forward slash in the end. */
 define( 'ABSPATH', WP_TESTS_DIR );
