@@ -1,4 +1,6 @@
 sudo: false
+services:
+  - mysql
 
 language: php
 env:
