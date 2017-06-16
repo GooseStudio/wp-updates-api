@@ -5,5 +5,10 @@ $GLOBALS['wp_tests_options'] = array(
 		'my-plugin/my-plugin.php'
 	)
 );
-include __DIR__ . '/config.php';
+$_tests_dir = getenv( 'WP_TESTS_DIR' );
+if ( ! $_tests_dir ) {
+	$_tests_dir = '/tmp/wordpress/';
+	if (!defined('WP_TESTS_DIR'))
+		define( 'WP_TESTS_DIR', $_tests_dir );
+}
 (new WP_Bootstrap(WP_TESTS_DIR, __DIR__ . '/wp-tests-config.php'))->run();
