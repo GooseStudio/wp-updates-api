@@ -62,8 +62,8 @@ class Bridge {
 		return $updates;
 	}
 
-	private function get_local_plugin_version() {
-		if ( ! function_exists( '\get_plugin_data' ) ) {
+	public function get_local_plugin_version() {
+		if ( ! function_exists( 'get_plugin_data' ) ) {
 			/** @noinspection PhpIncludeInspection */
 			require_once( ABSPATH . '/wp-admin/includes/plugin.php' );
 		}

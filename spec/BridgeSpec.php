@@ -27,6 +27,24 @@ class BridgeSpec extends ObjectBehavior {
 	}
 
 	public function it_should_call_remote() {
+		$prophet = new PHPProphet();
+		$prophecy = $prophet->prophesize( $this->get_ns( Bridge::class ) );
+		$prophecy->function_exists('get_plugin_data')->willReturn(true);
+		$prophecy->plugin_dir_path('test-plugin/test-plugin.php')->willReturn('');
+		PHPProphet::define($this->get_ns( Bridge::class ), 'get_plugin_data');
+		$prophecy->get_plugin_data('', false, false)->willReturn(array(
+			'Name' => 'Plugin Name',
+			'PluginURI' => 'Plugin URI',
+			'Version' => '1.0',
+			'Description' => 'Description',
+			'Author' => 'Author',
+			'AuthorURI' => 'Author URI',
+			'TextDomain' => 'Text Domain',
+			'DomainPath' => 'Domain Path',
+			'Network' => 'Network',
+		));
+		$prophecy->reveal();
+
 		$transport       = new MockTransport();
 		$transport->code = '200';
 		$transport->body = json_encode( [
@@ -53,7 +71,7 @@ class BridgeSpec extends ObjectBehavior {
 		assert( $result->response = $updates_result->response );
 	}
 
-	function get_ns( $class ) {
+	private function get_ns( $class ) {
 		return substr( $class, 0, strrpos( $class, '\\' ) );
 	}
 
