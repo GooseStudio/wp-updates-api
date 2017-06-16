@@ -3,20 +3,22 @@
   "description": "Adds external update support to WordPress plugins and themes, to be used with WP Updates Server. Uses license keys by default.",
   "type": "library",
   "require": {
-    "php": "^5.6 || ^7.0"
+    "php": "^5.6 || ^7.0",
+    "artofwp/wp-testing": "dev-master"
   },
   "require-dev": {
     "phpspec/phpspec": "^3.4",
     "phpspec/prophecy": "^1.5",
     "rmccue/requests": ">=1.0",
     "phpspec/php-diff": "^1.0.0",
-    "sebastian/exporter": "^1.0 || ^2.0 || ^3.0",
     "symfony/console": "^2.7 || ^3.0",
     "symfony/event-dispatcher": "^2.7 || ^3.0",
     "symfony/process": "^2.7 || ^3.0",
     "symfony/finder": "^2.7 || ^3.0",
     "symfony/yaml": "^2.7 || ^3.0",
-    "php-mock/php-mock-prophecy": "^0.0.2"
+    "php-mock/php-mock-prophecy": "^0.0.2",
+    "phpunit/phpunit": "^5.0",
+    "php-mock/php-mock-mockery": "dev-master"
   },
   "license": "MIT",
   "authors": [

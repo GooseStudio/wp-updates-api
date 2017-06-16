@@ -36,11 +36,10 @@ class Bridge {
 	 * @param WpUpdatesAPI $wp_updates_api
 	 */
 	public function __construct( $type, $file_name, $extension_name, $license_key, WpUpdatesAPI $wp_updates_api ) {
-		$this->type = self::PLUGIN === $type ? self::PLUGIN : self::THEME;
-		$this->type = $type;
-		$this->file_name = $file_name;
+		$this->type           = self::PLUGIN === $type ? self::PLUGIN : self::THEME;
+		$this->file_name      = $file_name;
 		$this->extension_name = $extension_name;
-		$this->license_key = $license_key;
+		$this->license_key    = $license_key;
 		$this->wp_updates_api = $wp_updates_api;
 	}
 
@@ -54,9 +53,22 @@ class Bridge {
 	 * @return mixed
 	 */
 	public function connect_update( $updates ) {
-		$package_data = $this->wp_updates_api->get_extension_package_meta_data($this->extension_name, $this->license_key);
-		$package_data['checked_timestamp'] = time();
-		$updates->response[$this->file_name] = $package_data;
+		$package_data = $this->wp_updates_api->get_extension_package_meta_data( $this->extension_name, $this->license_key );
+		if ( version_compare( $this->get_local_plugin_version(), $package_data['new_version'], '<' ) ) {
+			$package_data['checked_timestamp']     = time();
+			$updates->response[ $this->file_name ] = $package_data;
+		}
+
 		return $updates;
+	}
+
+	private function get_local_plugin_version() {
+		if ( ! function_exists( '\get_plugin_data' ) ) {
+			/** @noinspection PhpIncludeInspection */
+			require_once( ABSPATH . '/wp-admin/includes/plugin.php' );
+		}
+		$plugin_data = get_plugin_data( plugin_dir_path( $this->file_name ), false, false );
+
+		return $plugin_data['Version'];
 	}
 }

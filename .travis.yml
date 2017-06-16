@@ -1,6 +1,19 @@
-language: php
-
 sudo: false
+
+language: php
+env:
+  - WP_VERSION=latest WP_MULTISITE=0
+  global:
+    - WP_TRAVISCI=travis
+
+notifications:
+  email:
+    on_success: never
+    on_failure: change
+
+branches:
+  only:
+    - master
 
 cache:
   directories:
@@ -12,6 +25,9 @@ matrix:
       env: DEPENDENCIES='low'
     - php: 7.1
 
+before_script:
+  - bash bin/install-wp-tests.sh wordpress_tests root '' localhost $WP_VERSION
+
 before_install:
   - phpenv config-rm xdebug.ini
 
@@ -21,3 +37,4 @@ install:
 
 script:
   - bin/phpspec run --config=phpspec.yml --no-interaction
+  - bin/phpunit --testsuite=integration
