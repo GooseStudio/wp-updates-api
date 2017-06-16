@@ -2,9 +2,8 @@ sudo: false
 
 language: php
 env:
-  global:
-    - WP_VERSION=latest WP_MULTISITE=0
-    - WP_TRAVISCI=travis
+  - WP_VERSION=latest WP_MULTISITE=0
+  - WP_TRAVISCI=travis
 
 notifications:
   email:

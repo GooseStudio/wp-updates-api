@@ -27,7 +27,8 @@ define( 'DB_CHARSET', 'utf8' );
 define( 'DB_COLLATE', '' );
 $table_prefix  = 'wptests_';   // Only numbers, letters, and underscores please!
 
-if (defined('WP_TRAVISCI') && WP_TRAVISCI) {
+if (getenv('WP_TRAVISCI') === 'travis') {
+	define('WP_TESTS_DIR', getenv('WP_TESTS_DIR'));
 	define( 'DB_PASSWORD', '' );
 	define( 'WP_TESTS_DOMAIN', 'local.dev' );
     define( 'WP_TESTS_EMAIL', 'admin@local.dev' );
