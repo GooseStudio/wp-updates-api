@@ -22,16 +22,12 @@ cache:
   - vendor
   - $HOME/.composer/cache
   - $WP_TESTS_DIR
-before_install:
+before_script:
   - phpenv config-rm xdebug.ini
   # set up WP install
   - mkdir -p $WP_TESTS_DIR
   - if [ -z "$(ls -A $WP_TESTS_DIR)" ]; then git clone https://github.com/WordPress/WordPress.git $WP_TESTS_DIR; fi;
   - mysql -e 'CREATE DATABASE IF NOT EXISTS wordpress_tests;' -uroot
-
-before_script:
-  - phpenv config-rm xdebug.ini
-  - composer self-update
   - if [ "$DEPENDENCIES" != "low" ]; then composer update; fi;
   - if [ "$DEPENDENCIES" == "low" ]; then composer update --prefer-lowest; fi;
   # set up WP install
