@@ -5,7 +5,7 @@ services:
 language: php
 env:
   global:
-    - WP_VERSION=master WP_MULTISITE=0 WP_TRAVISCI=travis WP_TESTS_DIR=/tmp/wordpress/
+    - WP_VERSION=master WP_MULTISITE=0 WP_TRAVISCI=travis:phpunit WP_TESTS_DIR=/tmp/wordpress/
 
 notifications:
   email:
