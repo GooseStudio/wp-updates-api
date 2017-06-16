@@ -21,7 +21,6 @@ cache:
   directories:
   - vendor
   - $HOME/.composer/cache
-  - $WP_TESTS_DIR
 
 before_install:
   # set up WP install
