@@ -38,9 +38,10 @@ if ( ! $_tests_dir ) {
 	$_tests_dir = '/tmp/wordpress/';
 	if (!defined('WP_TESTS_DIR'))
 		define( 'WP_TESTS_DIR', $_tests_dir );
+} else {
+	if (!defined('WP_TESTS_DIR'))
+		define( 'WP_TESTS_DIR', $_tests_dir );
 }
-
-define( 'DB_PASSWORD', 'password' );
 /* Path to the WordPress codebase you'd like to test. Add a forward slash in the end. */
 define( 'ABSPATH', WP_TESTS_DIR );
 define( 'WP_TESTS_DOMAIN', 'example.org' );
