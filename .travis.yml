@@ -5,7 +5,7 @@ services:
 language: php
 env:
   global:
-    - WP_VERSION=latest WP_MULTISITE=0 WP_TRAVISCI=travis WP_TESTS_DIR=/tmp/wordpress/
+    - WP_VERSION=master WP_MULTISITE=0 WP_TRAVISCI=travis WP_TESTS_DIR=/tmp/wordpress/
 
 notifications:
   email:
@@ -24,16 +24,16 @@ cache:
   - $WP_TESTS_DIR
 
 before_install:
-  - phpenv config-rm xdebug.ini
   # set up WP install
   - mkdir -p $WP_TESTS_DIR
   - git clone https://github.com/WordPress/WordPress.git $WP_TESTS_DIR
   - mysql -e 'CREATE DATABASE IF NOT EXISTS wordpress_tests;' -uroot
 
 before_script:
+  - phpenv config-rm xdebug.ini
   - composer self-update
-  - if [ "$DEPENDENCIES" != "low" ]; then composer install; fi;
-  - if [ "$DEPENDENCIES" == "low" ]; then composer install --prefer-lowest; fi;
+  - if [ "$DEPENDENCIES" != "low" ]; then composer update; fi;
+  - if [ "$DEPENDENCIES" == "low" ]; then composer update --prefer-lowest; fi;
   # set up WP install
   - cd $WP_TESTS_DIR
   - git checkout $WP_VERSION
