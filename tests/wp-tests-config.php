@@ -29,7 +29,7 @@ $table_prefix = 'wptests_';   // Only numbers, letters, and underscores please!
 
 
 if ( file_exists( __DIR__ . '/config.php' ) ) {
-	require __DIR__ . '/config.php';
+	require_once __DIR__ . '/config.php';
 }
 defined( 'DB_PASSWORD' ) or define( 'DB_PASSWORD', '' );
 
