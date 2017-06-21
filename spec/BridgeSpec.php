@@ -17,6 +17,7 @@ class BridgeSpec extends ObjectBehavior {
 		$this->beConstructedWith( Bridge::PLUGIN, 'test-plugin/test-plugin.php', 'test-plugin', '', $api );
 		$prophet  = new PHPProphet();
 		$prophecy = $prophet->prophesize( $this->get_ns( Bridge::class ) );
+		/** @noinspection PhpUndefinedMethodInspection */
 		$prophecy->add_filter( 'site_transient_update_plugins', array(
 			$this->getWrappedObject(),
 			'connect_update'
@@ -29,9 +30,12 @@ class BridgeSpec extends ObjectBehavior {
 	public function it_should_call_remote() {
 		$prophet = new PHPProphet();
 		$prophecy = $prophet->prophesize( $this->get_ns( Bridge::class ) );
+		/** @noinspection PhpUndefinedMethodInspection */
 		$prophecy->function_exists('get_plugin_data')->willReturn(true);
+		/** @noinspection PhpUndefinedMethodInspection */
 		$prophecy->plugin_dir_path('test-plugin/test-plugin.php')->willReturn('');
 		PHPProphet::define($this->get_ns( Bridge::class ), 'get_plugin_data');
+		/** @noinspection PhpUndefinedMethodInspection */
 		$prophecy->get_plugin_data('', false, false)->willReturn(array(
 			'Name' => 'Plugin Name',
 			'PluginURI' => 'Plugin URI',
@@ -67,8 +71,9 @@ class BridgeSpec extends ObjectBehavior {
 					'package'     => 'https://example.com/wp_updates_api/v1/files/plugin_name?license_key=license_key',
 				]
 		];
-		$result                   = $this->connect_update( $updates )->shouldHavePropertyValue( 'test-plugin/test-plugin.php' );
-		assert( $result->response = $updates_result->response );
+		$result                   = $this->connect_update( $updates )->getWrappedObject();
+		$this->connect_update( $updates )->shouldHavePropertyValue( 'test-plugin/test-plugin.php' );
+		assert( is_object($result->response["test-plugin/test-plugin.php"]));
 	}
 
 	private function get_ns( $class ) {
