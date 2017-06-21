@@ -33,10 +33,10 @@ class BridgeSpec extends ObjectBehavior {
 		/** @noinspection PhpUndefinedMethodInspection */
 		$prophecy->function_exists('get_plugin_data')->willReturn(true);
 		/** @noinspection PhpUndefinedMethodInspection */
-		$prophecy->plugin_dir_path('test-plugin/test-plugin.php')->willReturn('');
+		$prophecy->plugin_basename('test-plugin/test-plugin.php')->willReturn('test-plugin/test-plugin.php');
 		PHPProphet::define($this->get_ns( Bridge::class ), 'get_plugin_data');
 		/** @noinspection PhpUndefinedMethodInspection */
-		$prophecy->get_plugin_data('', false, false)->willReturn(array(
+		$prophecy->get_plugin_data('test-plugin/test-plugin.php', false, false)->willReturn(array(
 			'Name' => 'Plugin Name',
 			'PluginURI' => 'Plugin URI',
 			'Version' => '1.0',

@@ -20,20 +20,20 @@ class Bridge {
 	/**
 	 * @var string
 	 */
-	private $file_name;
+	private $file;
 
 	/**
 	 * Bridge constructor.
 	 *
 	 * @param string $type plugin or theme
-	 * @param string $file_name
+	 * @param string $file the plugin or themes __FILE__
 	 * @param string $extension_name
 	 * @param string $license_key
 	 * @param WpUpdatesAPI $wp_updates_api
 	 */
-	public function __construct( $type, $file_name, $extension_name, $license_key, WpUpdatesAPI $wp_updates_api ) {
+	public function __construct( $type, $file, $extension_name, $license_key, WpUpdatesAPI $wp_updates_api ) {
 		$this->type           = self::PLUGIN === $type ? self::PLUGIN : self::THEME;
-		$this->file_name      = $file_name;
+		$this->file           = $file;
 		$this->extension_name = $extension_name;
 		$this->license_key    = $license_key;
 		$this->wp_updates_api = $wp_updates_api;
@@ -53,7 +53,7 @@ class Bridge {
 			$package_data = $this->wp_updates_api->get_extension_package_meta_data( $this->extension_name, $this->license_key );
 			if ( version_compare( $this->get_local_plugin_version(), $package_data['new_version'], '<' ) ) {
 				$package_data['checked_timestamp']     = time();
-				$updates->response[ $this->file_name ] = (object) $package_data;
+				$updates->response[ plugin_basename($this->file) ] = (object) $package_data;
 			}
 		} catch ( WpUpdatesAPIException $exception ) {
 			if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
@@ -69,7 +69,7 @@ class Bridge {
 			/** @noinspection PhpIncludeInspection */
 			require_once( ABSPATH . '/wp-admin/includes/plugin.php' );
 		}
-		$plugin_data = get_plugin_data( plugin_dir_path( $this->file_name ), false, false );
+		$plugin_data = get_plugin_data($this->file, false, false );
 
 		return $plugin_data['Version'];
 	}
