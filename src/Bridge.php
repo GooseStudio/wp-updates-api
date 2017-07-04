@@ -21,6 +21,10 @@ class Bridge {
 	 * @var string
 	 */
 	private $file;
+	/**
+	 * @var bool
+	 */
+	private $override_extension_information = false;
 
 	/**
 	 * Bridge constructor.
@@ -41,6 +45,39 @@ class Bridge {
 
 	public function build() {
 		add_filter( 'site_transient_' . $this->type, array( $this, 'connect_update' ) );
+		if ($this->override_extension_information) {
+			add_action('install_plugins_pre_plugin-information', array($this, 'render_extension_information'));
+		} else {
+			add_filter( 'plugins_api', array($this, 'extension_information'),10,3);
+		}
+	}
+
+	/**
+	 * @param bool $state Set true to disable the default WordPress plugin/theme information page.
+	 */
+	public function override_extension_information($state = true) {
+		$this->override_extension_information = $state;
+	}
+
+	/**
+	 * @param $response
+	 * @param $action
+	 * @param $args
+	 *
+	 * @return \stdClass
+	 */
+	public function extension_information($response, $action, $args) {
+		if ('plugin_information' === $action && dirname(plugin_basename($this->file))===$args->slug) {
+			$response = new \stdClass();
+			$response->sections = [];
+			$response->name = $this->extension_name;
+			$response->slug = 'content-tabs';
+			$response->homepage = 'https://goose.studio/plugins/content-tabs';
+			$response->sections['description'] = '<p>testing</p>';
+			$response->external = true;
+			return $response;
+		}
+		return $response;
 	}
 
 	/**
