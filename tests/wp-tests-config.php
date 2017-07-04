@@ -34,8 +34,10 @@ if ( file_exists( __DIR__ . '/config.php' ) ) {
 defined( 'DB_PASSWORD' ) or define( 'DB_PASSWORD', '' );
 
 $_tests_dir = getenv( 'WP_TESTS_DIR' );
-if ( ! $_tests_dir && ! defined( 'WP_TESTS_DIR' ) ) {
+if ( ! $_tests_dir ) {
 	$_tests_dir = '/tmp/wordpress/';
+}
+if ( ! defined( 'WP_TESTS_DIR' ) ) {
 	define( 'WP_TESTS_DIR', $_tests_dir );
 }
 /* Path to the WordPress codebase you'd like to test. Add a forward slash in the end. */
