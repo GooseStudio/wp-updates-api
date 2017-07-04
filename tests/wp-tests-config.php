@@ -9,7 +9,7 @@
 // define( 'WP_TESTS_FORCE_KNOWN_BUGS', true );
 
 // Test with WordPress debug mode (default).
-define( 'WP_DEBUG', true );
+//define( 'WP_DEBUG', true );
 
 // ** MySQL settings ** //
 

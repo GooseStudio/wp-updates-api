@@ -4,6 +4,7 @@ namespace spec\GooseStudio\WpUpdatesAPI;
 
 use GooseStudio\WpUpdatesAPI\Bridge;
 use GooseStudio\WpUpdatesAPI\WpUpdatesAPI;
+use phpmock\mockery\PHPMockery;
 use phpmock\prophecy\PHPProphet;
 use PhpSpec\ObjectBehavior;
 
@@ -13,26 +14,69 @@ use PhpSpec\ObjectBehavior;
  * @mixed Bridge
  */
 class BridgeSpec extends ObjectBehavior {
+	/**
+	 * @var PHPProphet
+	 */
+	private $prophet;
+	public function let() {
+		$this->prophet  = new PHPProphet();
+	}
 	public function it_should_hook_into_updates_plugins( WpUpdatesAPI $api ) {
 		$this->beConstructedWith( Bridge::PLUGIN, 'test-plugin/test-plugin.php', 'test-plugin', '', $api );
-		$prophet  = new PHPProphet();
-		$prophecy = $prophet->prophesize( $this->get_ns( Bridge::class ) );
+		PHPMockery::mock($this->get_ns( Bridge::class ),'add_filter')->twice();
+/**		PHPMockery::mock($this->get_ns( Bridge::class ),'add_filter')->withArgs(array('site_transient_update_plugins', array(
+			$this->getWrappedObject(),
+			'connect_update'
+		)))->once();
+
+		$prophecy = $this->prophet->prophesize( $this->get_ns( Bridge::class ) );
+		/** @noinspection PhpUndefinedMethodInspection */
+/*		$prophecy->add_filter( 'site_transient_update_plugins', array(
+			$this->getWrappedObject(),
+			'connect_update'
+		) )->shouldBeCalled();
+		/** @noinspection PhpUndefinedMethodInspection */
+/*		$prophecy->add_filter( 'plugins_api', array(
+			$this->getWrappedObject(),
+			'extension_information'
+		), 10, 3 )->shouldBeCalled();*/
+
+		//$prophecy->reveal();
+		$this->build();
+		//$this->prophet->checkPredictions();
+	}
+
+	public function it_should_disable_default_wp_plugin_information( WpUpdatesAPI $api ) {
+		$this->beConstructedWith( Bridge::PLUGIN, 'test-plugin/test-plugin.php', 'test-plugin', '', $api );
+		$this->override_extension_information(false);
+		$this->prophet  = new PHPProphet();
+		$prophecy = $this->prophet->prophesize( $this->get_ns( Bridge::class ) );
+		/** @noinspection PhpUndefinedMethodInspection */
+		$prophecy->add_action( 'install_plugins_pre_plugin-information', array(
+			$this->getWrappedObject(),
+			'render_extension_information'
+		) )->shouldBeCalled();
+		/** @noinspection PhpUndefinedMethodInspection */
 		$prophecy->add_filter( 'site_transient_update_plugins', array(
 			$this->getWrappedObject(),
 			'connect_update'
 		) )->shouldBeCalled();
 		$prophecy->reveal();
+		$this->override_extension_information(true);
 		$this->build();
-		$prophet->checkPredictions();
+		$this->prophet->checkPredictions();
 	}
 
 	public function it_should_call_remote() {
-		$prophet = new PHPProphet();
-		$prophecy = $prophet->prophesize( $this->get_ns( Bridge::class ) );
+		$this->prophet = new PHPProphet();
+		$prophecy = $this->prophet->prophesize( $this->get_ns( Bridge::class ) );
+		/** @noinspection PhpUndefinedMethodInspection */
 		$prophecy->function_exists('get_plugin_data')->willReturn(true);
-		$prophecy->plugin_dir_path('test-plugin/test-plugin.php')->willReturn('');
+		/** @noinspection PhpUndefinedMethodInspection */
+		$prophecy->plugin_basename('test-plugin/test-plugin.php')->willReturn('test-plugin/test-plugin.php');
 		PHPProphet::define($this->get_ns( Bridge::class ), 'get_plugin_data');
-		$prophecy->get_plugin_data('', false, false)->willReturn(array(
+		/** @noinspection PhpUndefinedMethodInspection */
+		$prophecy->get_plugin_data('test-plugin/test-plugin.php', false, false)->willReturn(array(
 			'Name' => 'Plugin Name',
 			'PluginURI' => 'Plugin URI',
 			'Version' => '1.0',
@@ -55,6 +99,7 @@ class BridgeSpec extends ObjectBehavior {
 		] );
 		$api             = new WpUpdatesAPI( 'https://example.com/wp_updates_api/v1/', [ 'transport' => $transport ] );
 		$this->beConstructedWith( Bridge::PLUGIN, 'test-plugin/test-plugin.php', 'test-plugin', '', $api );
+		$this->override_extension_information(false);
 		$updates                  = new \stdClass();
 		$updates->response        = [];
 		$updates_result           = new \stdClass();
@@ -67,8 +112,9 @@ class BridgeSpec extends ObjectBehavior {
 					'package'     => 'https://example.com/wp_updates_api/v1/files/plugin_name?license_key=license_key',
 				]
 		];
-		$result                   = $this->connect_update( $updates )->shouldHavePropertyValue( 'test-plugin/test-plugin.php' );
-		assert( $result->response = $updates_result->response );
+		$result                   = $this->connect_update( $updates )->getWrappedObject();
+		$this->connect_update( $updates )->shouldHavePropertyValue( 'test-plugin/test-plugin.php' );
+		assert( is_object($result->response["test-plugin/test-plugin.php"]));
 	}
 
 	private function get_ns( $class ) {
@@ -81,5 +127,9 @@ class BridgeSpec extends ObjectBehavior {
 				return array_key_exists( $key, $subject->response );
 			}
 		];
+	}
+
+	public function letGo() {
+		$this->prophet->checkPredictions();
 	}
 }

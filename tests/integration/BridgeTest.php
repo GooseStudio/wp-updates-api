@@ -73,4 +73,35 @@ class BridgeTest extends \ArtOfWP\WP\Testing\WP_UnitTestCase {
 		$update_plugins = get_site_transient('update_plugins');
 		self::assertArrayNotHasKey('my-plugin/my-plugin.php', $update_plugins->response);
 	}
+
+    /**
+     * @test
+     */
+    public function it_should_catch_exceptions()
+    {
+        f::mock('GooseStudio\WpUpdatesAPI', 'get_plugin_data')->withAnyArgs()->andReturn(
+            array(
+                'Name' => 'Plugin Name',
+                'PluginURI' => 'Plugin URI',
+                'Version' => '1.0',
+                'Description' => 'Description',
+                'Author' => 'Author',
+                'AuthorURI' => 'Author URI',
+                'TextDomain' => 'Text Domain',
+                'DomainPath' => 'Domain Path',
+                'Network' => 'Network',
+            )
+        );
+
+        $transport       = new MockTransport();
+        $transport->code = '500';
+        $transport->body = 'Server Error';
+        $api             = new WpUpdatesAPI( 'https://example.com/wp_updates_api/v1/', [ 'transport' => $transport ] );
+        $bridge = new Bridge('update_plugins', 'my-plugin/my-plugin.php', 'my-plugin','', $api);
+        $bridge->build();
+        wp_update_plugins();
+        $update_plugins = get_site_transient('update_plugins');
+        self::assertArrayNotHasKey('my-plugin/my-plugin.php', $update_plugins->response);
+
+	}
 }
