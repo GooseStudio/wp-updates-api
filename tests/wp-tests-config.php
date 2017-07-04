@@ -29,15 +29,13 @@ $table_prefix = 'wptests_';   // Only numbers, letters, and underscores please!
 
 
 if ( file_exists( __DIR__ . '/config.php' ) ) {
-	require __DIR__ . '/config.php';
+	require_once __DIR__ . '/config.php';
 }
 defined( 'DB_PASSWORD' ) or define( 'DB_PASSWORD', '' );
 
 $_tests_dir = getenv( 'WP_TESTS_DIR' );
-if ( ! $_tests_dir ) {
+if ( ! $_tests_dir && ! defined( 'WP_TESTS_DIR' ) ) {
 	$_tests_dir = '/tmp/wordpress/';
-}
-if ( ! defined( 'WP_TESTS_DIR' ) ) {
 	define( 'WP_TESTS_DIR', $_tests_dir );
 }
 /* Path to the WordPress codebase you'd like to test. Add a forward slash in the end. */
@@ -50,4 +48,4 @@ define( 'WP_PHP_BINARY', 'php' );
 
 define( 'WPLANG', '' );
 //define( 'WP_CONTENT_DIR', WP_TESTS_CONTENT_DIR );
-define( 'WP_CONTENT_URL', 'http://' . WP_TESTS_DOMAIN . '/content' );
+define( 'WP_CONTENT_URL', 'http://' . WP_TESTS_DOMAIN . '/wp-content' );
