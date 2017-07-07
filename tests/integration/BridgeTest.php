@@ -35,6 +35,9 @@ class BridgeTest extends \ArtOfWP\WP\Testing\WP_UnitTestCase {
 		$api             = new WpUpdatesAPI( 'https://example.com/wp_updates_api/v1/', [ 'transport' => $transport ] );
 		$bridge = new Bridge('update_plugins', 'my-plugin/my-plugin.php', 'my-plugin','', $api);
 		$bridge->build();
+		add_filter( 'pre_http_request', function ( ) {
+			return ['headers'=>'', 'body'=>'{"plugins":[],"translations":[],"no_update":[]}', 'response'=>['code' => 200], 'cookies'=>[], 'filename'=>''];
+		}, 10, 0);
 		wp_update_plugins();
 		$update_plugins = get_site_transient('update_plugins');
 		self::assertArrayHasKey('my-plugin/my-plugin.php', $update_plugins->response);
@@ -69,6 +72,9 @@ class BridgeTest extends \ArtOfWP\WP\Testing\WP_UnitTestCase {
 		$api             = new WpUpdatesAPI( 'https://example.com/wp_updates_api/v1/', [ 'transport' => $transport ] );
 		$bridge = new Bridge('update_plugins', 'my-plugin/my-plugin.php', 'my-plugin','', $api);
 		$bridge->build();
+		add_filter( 'pre_http_request', function ( ) {
+			return ['headers'=>'', 'body'=>'{"plugins":[],"translations":[],"no_update":[]}', 'response'=>['code' => 200], 'cookies'=>[], 'filename'=>''];
+		}, 10, 0);
 		wp_update_plugins();
 		$update_plugins = get_site_transient('update_plugins');
 		self::assertArrayNotHasKey('my-plugin/my-plugin.php', $update_plugins->response);
@@ -99,6 +105,9 @@ class BridgeTest extends \ArtOfWP\WP\Testing\WP_UnitTestCase {
         $api             = new WpUpdatesAPI( 'https://example.com/wp_updates_api/v1/', [ 'transport' => $transport ] );
         $bridge = new Bridge('update_plugins', 'my-plugin/my-plugin.php', 'my-plugin','', $api);
         $bridge->build();
+	    add_filter( 'pre_http_request', function ( ) {
+		    return ['headers'=>'', 'body'=>'{"plugins":[],"translations":[],"no_update":[]}', 'response'=>['code' => 200], 'cookies'=>[], 'filename'=>''];
+	    }, 10, 0);
         wp_update_plugins();
         $update_plugins = get_site_transient('update_plugins');
         self::assertArrayNotHasKey('my-plugin/my-plugin.php', $update_plugins->response);
