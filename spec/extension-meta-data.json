@@ -1,0 +1,6 @@
+{
+  "slug": "plugin-name",
+  "new_version": "1.1",
+  "url": "https:\/\/example.com\/plugin\/plugin-name",
+  "package": "https:\/\/example.com\/wp_updates_api\/v1\/files\/plugin-name?license_key=license_key"
+}

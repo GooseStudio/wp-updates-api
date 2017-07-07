@@ -8,13 +8,13 @@
     "reviews": "<h2>TEST<\/h2><p>what ya gonnda do<\/p>",
     "other_notes": "<h2>TEST<\/h2><p>what ya gonnda do<\/p>"
   },
-  "name": "Content tabs",
-  "slug": "content-tabs",
-  "homepage": "https:\/\/goose.studio\/plugins\/content-tabs",
+  "name": "Plugin Name",
+  "slug": "plugin-name",
+  "homepage": "https:\/\/example.com\/plugins\/plugin-name",
   "short_description": "hmm",
   "version": "2.0",
   "tested": "4.8",
-  "author": "<a href=\"https:\/\/goose.studio\">Goose Studio<\/a>,<a href=\"https:\/\/goose.studio\">Goose Studio2<\/a>",
+  "author": "<a href=\"https:\/\/example.com\">Widget Company<\/a>,<a href=\"https:\/\/example.com\">Widget Company 2<\/a>",
   "requires": "4.4",
   "rating": 90,
   "num_ratings": 5000,
@@ -31,9 +31,9 @@
     "test"
   ],
   "compatibility": "4.8",
-  "donate_link": "https:\/\/goose.studio\/plugins\/content-tabs",
+  "donate_link": "https:\/\/example.com\/plugins\/plugin-name",
   "external": true,
   "contributors": {
-    "Andreas Nurbo": "https:\/\/goose.studio"
+    "Andreas Nurbo": "https:\/\/example.com"
   }
 }

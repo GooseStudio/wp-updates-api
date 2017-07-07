@@ -83,18 +83,19 @@ class Bridge {
 	/**
 	 * @param $updates
 	 *
-	 * @return mixed
+	 * @return array
+	 * @throws \Exception
 	 */
 	public function connect_update( $updates ) {
 		try {
 			$package_data = $this->wp_updates_api->get_extension_package_meta_data( $this->extension_name, $this->license_key );
-			if ( version_compare( $this->get_local_plugin_version(), $package_data['new_version'], '<' ) ) {
-				$package_data['checked_timestamp']     = time();
-				$updates->response[ plugin_basename($this->file) ] = (object) $package_data;
+			if ( version_compare( $this->get_local_plugin_version(), $package_data->new_version, '<' ) ) {
+				$package_data->checked_timestamp     = time();
+				$updates->response[ plugin_basename($this->file) ] = (new ExtensionPackageMetaDataConverter())->convert_to_object($package_data);
 			}
 		} catch ( WpUpdatesAPIException $exception ) {
 			if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-				error_log( "Update check failed for $this->extension_name with license $this->license_key with message " . $exception->getMessage() );
+				throw new \Exception( "Update check failed for $this->extension_name with license $this->license_key with message " . $exception->getMessage() );
 			}
 		}
 

@@ -64,13 +64,20 @@ class WpUpdatesAPI {
 		throw new WpUpdatesAPIException( $response->body, $response->status_code );
 	}
 
+	/**
+	 * @param string $extension_name
+	 * @param string $license_key
+	 *
+	 * @return ExtensionPackageMetaData
+	 * @throws WpUpdatesAPIException
+	 */
 	public function get_extension_package_meta_data( $extension_name, $license_key ) {
 		$headers  = [ 'Accept' => 'application/json' ];
 		$query_array = [ 'extension_name' => $extension_name, 'license_key' => $license_key ];
 		$query       = http_build_query( $query_array );
 		$response = Requests::get( $this->endpoint . '/products/package/' . urlencode( $extension_name ) . '?'.$query, $headers, $this->options );
 		if ( $response->success ) {
-			return json_decode( $response->body, true );
+			return (new ExtensionPackageMetaDataConverter())->convert_from_json($response->body);
 		}
 		throw new WpUpdatesAPIException( $response->body, $response->status_code );
 	}

@@ -41,27 +41,27 @@ class ExtensionInformation {
 	public function __construct() {
 		$this->properties = [
 			'sections'          => [],
-			'name'              => 'Plugin Name',
-			'slug'              => 'plugin-name',
-			'homepage'          => 'https://goose.studio/plugins/content-tabs',
+			'name'              => '',
+			'slug'              => '',
+			'homepage'          => '',
 			'short_description' => '',
-			'version'           => '2.0',
-			'tested'            => '4.8',
-			'author'            => '<a href="https://goose.studio">Goose Studio</a>,<a href="https://goose.studio">Goose Studio2</a>',
-			'requires'          => '4.4',
-			'rating'            => 90,
-			'num_ratings'       => 5000,
-			'downloaded'        => 500,
-			'active_installs'   => 500,
+			'version'           => '',
+			'tested'            => '',
+			'author'            => '',
+			'requires'          => '',
+			'rating'            => -1,
+			'num_ratings'       => -1,
+			'downloaded'        => -1,
+			'active_installs'   => -1,
 			'banners'           => [
-				'low'  => 'https://example.com/772x250.jpg',
-				'high' => 'https://example.com/1544x500.jpg'
+				'low'  => '',
+				'high' => ''
 			],
-			'last_updated'      => date( 'Y-m-d' ),
-			'added'             => date( 'Y-m-d' ),
-			'tags'              => [ 'black', 'test' ],
-			'compatibility'     => '4.8',
-			'donate_link' => 'https://goose.studio/plugins/content-tabs',
+			'last_updated'      => '',
+			'added'             => '',
+			'tags'              => [],
+			'compatibility'     => '',
+			'donate_link'       => '',
 			'external'          => true,
 			'contributors'      => []
 		];
@@ -106,5 +106,12 @@ class ExtensionInformation {
 			return $this->properties[$property];
 		}
 		throw new \OutOfBoundsException("$property is not a property of class");
+	}
+
+	/**
+	 * @return array
+	 */
+	public function to_array() {
+		return $this->properties;
 	}
 }
