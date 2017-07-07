@@ -52,14 +52,14 @@ class WpUpdatesAPI {
 	/**
 	 * @param string $extension_name
 	 *
-	 * @return array
+	 * @return ExtensionInformation
 	 * @throws WpUpdatesAPIException
 	 */
 	public function get_extension_meta_data( $extension_name ) {
 		$headers  = [ 'Accept' => 'application/json' ];
 		$response = Requests::get( $this->endpoint . '/products/' . urlencode( $extension_name ), $headers, $this->options );
 		if ( $response->success ) {
-			return json_decode( $response->body, true );
+			return (new ExtensionInformationConverter())->convert_from_json($response->body);
 		}
 		throw new WpUpdatesAPIException( $response->body, $response->status_code );
 	}

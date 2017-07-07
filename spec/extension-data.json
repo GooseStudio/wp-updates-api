@@ -1,0 +1,39 @@
+{
+  "sections": {
+    "description": "<h2>TEST<\/h2><p>what ya gonnda do<\/p>",
+    "installation": "<h2>TEST<\/h2><p>what ya gonnda do<\/p>",
+    "faq": "<ul><li><\/li><\/ul><h2 id=\"text\">TEST<\/h2><p>what ya gonnda do<\/p>",
+    "screenshots": "<img src=\"https:\/\/unsplash.it\/500\/500\/?random\" \/>",
+    "changelog": "<h2>TEST<\/h2><p>what ya gonnda do<\/p>",
+    "reviews": "<h2>TEST<\/h2><p>what ya gonnda do<\/p>",
+    "other_notes": "<h2>TEST<\/h2><p>what ya gonnda do<\/p>"
+  },
+  "name": "Content tabs",
+  "slug": "content-tabs",
+  "homepage": "https:\/\/goose.studio\/plugins\/content-tabs",
+  "short_description": "hmm",
+  "version": "2.0",
+  "tested": "4.8",
+  "author": "<a href=\"https:\/\/goose.studio\">Goose Studio<\/a>,<a href=\"https:\/\/goose.studio\">Goose Studio2<\/a>",
+  "requires": "4.4",
+  "rating": 90,
+  "num_ratings": 5000,
+  "downloaded": 500,
+  "active_installs": 500,
+  "banners": {
+    "low": "https:\/\/example.com\/772x250.jpg",
+    "high": "https:\/\/example.com\/1544x500.jpg"
+  },
+  "last_updated": "2017-07-05",
+  "added": "2017-07-05",
+  "tags": [
+    "black",
+    "test"
+  ],
+  "compatibility": "4.8",
+  "donate_link": "https:\/\/goose.studio\/plugins\/content-tabs",
+  "external": true,
+  "contributors": {
+    "Andreas Nurbo": "https:\/\/goose.studio"
+  }
+}

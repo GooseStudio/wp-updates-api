@@ -102,6 +102,11 @@ class BridgeTest extends \ArtOfWP\WP\Testing\WP_UnitTestCase {
         wp_update_plugins();
         $update_plugins = get_site_transient('update_plugins');
         self::assertArrayNotHasKey('my-plugin/my-plugin.php', $update_plugins->response);
+	}
 
+	/**
+	 * @test
+	 **/
+	public function it_should_display_plugin_information() {
 	}
 }

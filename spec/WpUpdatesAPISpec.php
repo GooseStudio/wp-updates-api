@@ -28,11 +28,26 @@ class WpUpdatesAPISpec extends ObjectBehavior {
 	}
 
 	public function it_should_retrieve_extension_information() {
+		$sections = array(
+			'description'  => '<p>test</p>',
+			'installation' => '<p>test</p>',
+			'faq'          => '<p>test</p>',
+			'screenshots'  => '<p>test</p>',
+			'changelog'    => '<p>test</p>',
+//			'reviews'      => ,
+			'other_notes'  => '<p>test</p>'
+		);
+		$package = [
+			'sections' => $sections,
+			'name' => 'Plugin Name',
+			'slug' => 'plugin-name',
+			'homepage' => 'https://example.com/plugin/plugin-name',
+		];
 		$transport       = new MockTransport();
 		$transport->code = '200';
-		$transport->body = json_encode( [] );
+		$transport->body = json_encode( $package );
 		$this->beConstructedWith( 'https://example.com/wp_updates_api/v1/', [ 'transport' => $transport ] );
-		$this->get_extension_meta_data( 'plugin_name' )->shouldBe( [] );
+		$this->get_extension_meta_data( 'plugin_name' )->name->shouldBe('Plugin Name');
 	}
 
 	public function it_should_retrieve_extension_package_info() {
