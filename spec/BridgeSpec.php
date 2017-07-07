@@ -56,11 +56,18 @@ class BridgeSpec extends ObjectBehavior {
 			$this->getWrappedObject(),
 			'render_extension_information'
 		) )->shouldBeCalled();
+		PHPMockery::mock($this->get_ns( Bridge::class ),'add_filter')->twice();
 		/** @noinspection PhpUndefinedMethodInspection */
-		$prophecy->add_filter( 'site_transient_update_plugins', array(
+/*		$prophecy->add_filter( 'http_request_args', array(
+			$this->getWrappedObject(),
+			'disable_wp_org_plugin_checks'
+		), 10, 2 )->shouldBeCalled();
+		/** @noinspection PhpUndefinedMethodInspection */
+/*		$prophecy->add_filter( 'site_transient_update_plugins', array(
 			$this->getWrappedObject(),
 			'connect_update'
-		) )->shouldBeCalled();
+		) )->shouldBeCalled();*/
+
 		$prophecy->reveal();
 		$this->override_extension_information(true);
 		$this->build();

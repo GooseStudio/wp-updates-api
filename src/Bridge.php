@@ -51,30 +51,33 @@ class Bridge {
 			add_filter( 'plugins_api', array( $this, 'extension_information' ), 10, 3 );
 		}
 		if ( self::PLUGIN === $this->type ) {
-			add_filter( 'http_request_args', function ( $response, $url ) {
-				if ( 0 === strpos( $url, 'https://api.wordpress.org/plugins/update-check' ) ) {
-					$basename = plugin_basename( $this->file );
-					$plugins  = json_decode( $response['body']['plugins'] );
-					unset( $plugins->plugins->$basename );
-					unset( $plugins->active[ array_search( $basename, $plugins->active ) ] );
-					$response['body']['plugins'] = json_encode( $plugins );
-				}
-
-				return $response;
-			}, 10, 2 );
+			add_filter( 'http_request_args', array($this, 'disable_wp_org_plugin_checks'), 10, 2 );
 		}
 		if ( self::THEME === $this->type ) {
-			add_filter( 'http_request_args', function ( $response, $url ) {
-				if ( 0 === strpos( $url, 'https://api.wordpress.org/themes/update-check' ) ) {
-					$themes = json_decode( $response['body']['themes'] );
-					unset( $themes->themes->{get_option( 'template' )} );
-					unset( $themes->themes->{get_option( 'stylesheet' )} );
-					$response['body']['themes'] = json_encode( $themes );
-				}
-
-				return $response;
-			}, 10, 2 );
+			add_filter( 'http_request_args', array($this, 'disable_wp_org_theme_checks'), 10, 2 );
 		}
+	}
+
+	public function disable_wp_org_theme_checks ( $response, $url ) {
+		if ( 0 === strpos( $url, 'https://api.wordpress.org/themes/update-check' ) ) {
+			$themes = json_decode( $response['body']['themes'] );
+			unset( $themes->themes->{get_option( 'template' )} );
+			unset( $themes->themes->{get_option( 'stylesheet' )} );
+			$response['body']['themes'] = json_encode( $themes );
+		}
+
+		return $response;
+	}
+	public function disable_wp_org_plugin_checks ( $response, $url ) {
+		if ( 0 === strpos( $url, 'https://api.wordpress.org/plugins/update-check' ) ) {
+			$basename = plugin_basename( $this->file );
+			$plugins  = json_decode( $response['body']['plugins'] );
+			unset( $plugins->plugins->$basename );
+			unset( $plugins->active[ array_search( $basename, $plugins->active ) ] );
+			$response['body']['plugins'] = json_encode( $plugins );
+		}
+
+		return $response;
 	}
 
 	/**
