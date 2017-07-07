@@ -50,6 +50,16 @@ class Bridge {
 		} else {
 			add_filter( 'plugins_api', array($this, 'extension_information'),10,3);
 		}
+		add_filter( 'http_request_args', function ( $response, $url ) {
+			if ( 0 === strpos( $url, 'https://api.wordpress.org/plugins/update-check' ) ) {
+				$basename = plugin_basename( $this->file );
+				$plugins  = json_decode( $response['body']['plugins'] );
+				unset( $plugins->plugins->$basename );
+				unset( $plugins->active[ array_search( $basename, $plugins->active ) ] );
+				$response['body']['plugins'] = json_encode( $plugins );
+			}
+			return $response;
+		}, 10, 2 );
 	}
 
 	/**
