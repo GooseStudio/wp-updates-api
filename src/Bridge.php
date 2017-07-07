@@ -58,22 +58,33 @@ class Bridge {
 		}
 	}
 
+	/**
+	 * @param $response
+	 * @param $url
+	 *
+	 * @return mixed
+	 */
 	public function disable_wp_org_theme_checks ( $response, $url ) {
 		if ( 0 === strpos( $url, 'https://api.wordpress.org/themes/update-check' ) ) {
-			$themes = json_decode( $response['body']['themes'] );
-			unset( $themes->themes->{get_option( 'template' )} );
-			unset( $themes->themes->{get_option( 'stylesheet' )} );
+			$themes = json_decode( $response['body']['themes'], true );
+			unset( $themes['themes'][ get_option( 'template' ) ], $themes['themes'][ get_option( 'stylesheet' ) ] );
 			$response['body']['themes'] = json_encode( $themes );
 		}
 
 		return $response;
 	}
+
+	/**
+	 * @param $response
+	 * @param $url
+	 *
+	 * @return mixed
+	 */
 	public function disable_wp_org_plugin_checks ( $response, $url ) {
 		if ( 0 === strpos( $url, 'https://api.wordpress.org/plugins/update-check' ) ) {
 			$basename = plugin_basename( $this->file );
-			$plugins  = json_decode( $response['body']['plugins'] );
-			unset( $plugins->plugins->$basename );
-			unset( $plugins->active[ array_search( $basename, $plugins->active ) ] );
+			$plugins  = json_decode( $response['body']['plugins'], true );
+			unset( $plugins['plugins'][ $basename ], $plugins['active'][ $basename ] );
 			$response['body']['plugins'] = json_encode( $plugins );
 		}
 
@@ -132,6 +143,9 @@ class Bridge {
 		return $updates;
 	}
 
+	/**
+	 * @return string
+	 */
 	public function get_local_plugin_version() {
 		if ( ! function_exists( 'get_plugin_data' ) ) {
 			/** @noinspection PhpIncludeInspection */
