@@ -104,18 +104,19 @@ class Bridge {
 	 * @param $args
 	 *
 	 * @return \stdClass
+	 * @throws \GooseStudio\WpUpdatesAPI\WpUpdatesAPIException
 	 */
 	public function extension_information( $response, $action, $args ) {
 		if ( 'plugin_information' === $action && dirname( plugin_basename( $this->file ) ) === $args->slug ) {
-			$response                          = new \stdClass();
-			$response->sections                = [];
-			$response->name                    = $this->extension_name;
-			$response->slug                    = 'content-tabs';
-			$response->homepage                = 'https://goose.studio/plugins/content-tabs';
-			$response->sections['description'] = '<p>testing</p>';
-			$response->external                = true;
-
-			return $response;
+			try {
+				$extension          = $this->wp_updates_api->get_extension_meta_data( $this->extension_name );
+				$response           = ( new ExtensionInformationConverter() )->convert_to_object( $extension );
+				$response->external = true;
+			} catch ( WpUpdatesAPIException $ex ) {
+				if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+					throw $ex;
+				}
+			}
 		}
 
 		return $response;
@@ -136,7 +137,7 @@ class Bridge {
 			}
 		} catch ( WpUpdatesAPIException $exception ) {
 			if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-				throw new \Exception( "Update check failed for $this->extension_name with license $this->license_key with message " . $exception->getMessage() );
+				throw new WpUpdatesAPIException( "Update check failed for $this->extension_name with license $this->license_key with message " . $exception->getMessage() );
 			}
 		}
 
@@ -149,7 +150,7 @@ class Bridge {
 	public function get_local_plugin_version() {
 		if ( ! function_exists( 'get_plugin_data' ) ) {
 			/** @noinspection PhpIncludeInspection */
-			require_once( ABSPATH . '/wp-admin/includes/plugin.php' );
+			require_once ABSPATH . '/wp-admin/includes/plugin.php';
 		}
 		$plugin_data = get_plugin_data( $this->file, false, false );
 
