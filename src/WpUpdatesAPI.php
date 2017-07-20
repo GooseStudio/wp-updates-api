@@ -35,7 +35,7 @@ class WpUpdatesAPI {
 	 */
 	public function get_latest_version( $extension_name ) {
 		$headers  = [ 'Accept' => 'application/json' ];
-		$response = Requests::get( $this->endpoint . '/products/' . $extension_name . '/version/', $headers, $this->options );
+		$response = Requests::get( $this->endpoint . '/extensions/' . $extension_name . '/version/', $headers, $this->options );
 		if ( $response->success ) {
 			return json_decode( $response->body, true );
 		}
@@ -57,7 +57,7 @@ class WpUpdatesAPI {
 	 */
 	public function get_extension_meta_data( $extension_name ) {
 		$headers  = [ 'Accept' => 'application/json' ];
-		$response = Requests::get( $this->endpoint . '/products/' . urlencode( $extension_name ), $headers, $this->options );
+		$response = Requests::get( $this->endpoint . '/extensions/' . urlencode( $extension_name ), $headers, $this->options );
 		if ( $response->success ) {
 			return (new ExtensionInformationConverter())->convert_from_json($response->body);
 		}
@@ -72,10 +72,10 @@ class WpUpdatesAPI {
 	 * @throws WpUpdatesAPIException
 	 */
 	public function get_extension_package_meta_data( $extension_name, $license_key ) {
-		$headers  = [ 'Accept' => 'application/json' ];
+		$headers     = [ 'Accept' => 'application/json' ];
 		$query_array = [ 'extension_name' => $extension_name, 'license_key' => $license_key ];
 		$query       = http_build_query( $query_array );
-		$response = Requests::get( $this->endpoint . '/products/package/' . urlencode( $extension_name ) . '?'.$query, $headers, $this->options );
+		$response    = Requests::get( $this->endpoint . '/extensions/package/' . urlencode( $extension_name ) . '?' . $query, $headers, $this->options );
 		if ( $response->success ) {
 			return (new ExtensionPackageMetaDataConverter())->convert_from_json($response->body);
 		}
