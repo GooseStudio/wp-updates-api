@@ -35,7 +35,7 @@ class WpUpdatesAPI {
 	 */
 	public function get_latest_version( $extension_name ) {
 		$headers  = [ 'Accept' => 'application/json' ];
-		$response = Requests::get( $this->endpoint . '/extensions/' . $extension_name . '/version/', $headers, $this->options );
+		$response = Requests::get( $this->endpoint . '/extensions/' . urlencode( $extension_name ) . '/version/', $headers, $this->options );
 		if ( $response->success ) {
 			return json_decode( $response->body, true );
 		}
