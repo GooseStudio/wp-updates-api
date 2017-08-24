@@ -11,7 +11,7 @@ class ExtensionPackageMetaDataConverter
 	 */
 	public function convert_from_json( $json ) {
 		$information = new ExtensionPackageMetaData();
-		$data_array = json_decode($json);
+		$data_array  = json_decode( $json, true );
 		/** @var array $data_array */
 		foreach ( $data_array as $property => $value ) {
 			if ( isset($information->$property ) ) {
