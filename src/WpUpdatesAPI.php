@@ -75,7 +75,7 @@ class WpUpdatesAPI {
 		$headers     = [ 'Accept' => 'application/json' ];
 		$query_array = [ 'extension_name' => $extension_name, 'license_key' => $license_key ];
 		$query       = http_build_query( $query_array );
-		$response    = Requests::get( $this->endpoint . '/extensions/package/' . urlencode( $extension_name ) . '?' . $query, $headers, $this->options );
+		$response    = Requests::get( $this->endpoint . '/extensions/' . urlencode( $extension_name ) . '/package/' . '?' . $query, $headers, $this->options );
 		if ( $response->success ) {
 			return (new ExtensionPackageMetaDataConverter())->convert_from_json($response->body);
 		}
