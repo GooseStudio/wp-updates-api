@@ -49,10 +49,10 @@ class ExtensionInformation {
 			'tested'            => '',
 			'author'            => '',
 			'requires'          => '',
-			'rating'            => -1,
-			'num_ratings'       => -1,
-			'downloaded'        => -1,
-			'active_installs'   => -1,
+			'rating'            => null,
+			'num_ratings'       => null,
+			'downloaded'        => null,
+			'active_installs'   => null,
 			'banners'           => [
 				'low'  => '',
 				'high' => ''
@@ -75,15 +75,20 @@ class ExtensionInformation {
 	 * @throws \UnexpectedValueException
 	 */
 	public function __set( $property, $value ) {
-		if (array_key_exists($property, $this->properties)) {
-			if (gettype($value) === gettype($this->properties[$property])) {
-				$this->properties[$property] = $value;
-			} else {
-				throw new \UnexpectedValueException("$property value as wrong type.");
-			}
+		if ( $this->has_property( $property ) ) {
+			$this->properties[ $property ] = $value;
 		} else {
 			throw new \OutOfBoundsException("$property is not a property of class");
 		}
+	}
+
+	/**
+	 * @param string $property
+	 *
+	 * @return bool
+	 */
+	public function has_property( $property ) {
+		return array_key_exists( $property, $this->properties );
 	}
 
 	/**
@@ -102,7 +107,7 @@ class ExtensionInformation {
 	 * @throws \OutOfBoundsException
 	 */
 	public function __get( $property ) {
-		if (array_key_exists($property, $this->properties)) {
+		if ( $this->has_property( $property ) ) {
 			return $this->properties[$property];
 		}
 		throw new \OutOfBoundsException("$property is not a property of class");
