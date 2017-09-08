@@ -3,6 +3,7 @@
 namespace spec\GooseStudio\WpUpdatesAPI;
 
 use GooseStudio\WpUpdatesAPI\WpUpdatesAPI;
+use phpmock\mockery\PHPMockery;
 use PhpSpec\ObjectBehavior;
 
 /**
@@ -20,6 +21,12 @@ class WpUpdatesAPISpec extends ObjectBehavior {
 	}
 
 	public function it_should_retrieve_latest_version() {
+		PHPMockery::mock( $this->get_ns( WpUpdatesAPI::class ), 'home_url' )->andReturn( '' );
+		PHPMockery::mock( $this->get_ns( WpUpdatesAPI::class ), 'get_site_option' )->andReturn( '' );
+		PHPMockery::mock( $this->get_ns( WpUpdatesAPI::class ), 'apply_filters' )->andReturn( '' );
+		PHPMockery::mock( $this->get_ns( WpUpdatesAPI::class ), 'get_locale' )->andReturn( '' );
+		PHPMockery::mock( $this->get_ns( WpUpdatesAPI::class ), 'is_multisite' )->andReturn( false );
+		PHPMockery::mock( $this->get_ns( WpUpdatesAPI::class ), 'count_users' )->andReturn( 1 );
 		$transport       = new MockTransport();
 		$transport->code = '200';
 		$transport->body = json_encode( [ 'version' => '4.0.1' ] );
@@ -61,5 +68,9 @@ class WpUpdatesAPISpec extends ObjectBehavior {
 		] );
 		$this->beConstructedWith( 'https://example.com/wp_updates_api/v1/', [ 'transport' => $transport ] );
 		$this->get_extension_package_meta_data( 'plugin_name', 'license_key' )->slug->shouldBe('plugin_name');
+	}
+
+	private function get_ns( $class ) {
+		return substr( $class, 0, strrpos( $class, '\\' ) );
 	}
 }

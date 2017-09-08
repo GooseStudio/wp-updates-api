@@ -19,7 +19,15 @@ class BridgeSpec extends ObjectBehavior {
 	 */
 	private $prophet;
 	public function let() {
+		defined( 'ABSPATH' ) or define( 'ABSPATH', __DIR__ );
+		defined( 'WPINC' ) or define( 'WPINC', '/' );
 		$this->prophet  = new PHPProphet();
+		PHPMockery::mock( $this->get_ns( Bridge::class ), 'home_url' )->andReturn( '' );
+		PHPMockery::mock( $this->get_ns( Bridge::class ), 'get_site_option' )->andReturn( '' );
+		PHPMockery::mock( $this->get_ns( Bridge::class ), 'apply_filters' )->andReturn( '' );
+		PHPMockery::mock( $this->get_ns( Bridge::class ), 'get_locale' )->andReturn( '' );
+		PHPMockery::mock( $this->get_ns( Bridge::class ), 'is_multisite' )->andReturn( false );
+		PHPMockery::mock( $this->get_ns( Bridge::class ), 'count_users' )->andReturn( 1 );
 	}
 	public function it_should_hook_into_updates_plugins( WpUpdatesAPI $api ) {
 		$this->beConstructedWith( Bridge::PLUGIN, 'test-plugin/test-plugin.php', 'test-plugin', '', $api );
