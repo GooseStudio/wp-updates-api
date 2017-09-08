@@ -51,6 +51,31 @@ class WpLicenseAPI
 	}
 
 	/**
+	 * Checks if a license key is valid
+	 *
+	 * @param array $extensions [$extension_name => $license_key]
+	 *
+	 * @return array
+	 * @throws WpUpdatesAPIException
+	 */
+	public function all_is_valid( $extensions ) {
+		$headers     = [ 'Accept' => 'application/json' ];
+		$query_array = ['extensions' => $extensions];
+		$query       = http_build_query( $query_array );
+		$response    = Requests::get( $this->endpoint . '/licenses/?' . $query, $headers, $this->options );
+
+		if ( $response->success ) {
+			$result = json_decode( $response->body, true );
+			$all = [];
+			foreach ($extensions as $extension => $key) {
+				$all[$extension] = isset( $result[$extension]['status'] ) && $result[$extension]['status'] === 'valid';
+			}
+			return $all;
+		}
+		throw new WpUpdatesAPIException( $response->body, $response->status_code );
+	}
+
+	/**
 	 * Retrieves the data that is connected with plugin/theme and license key.
 	 *
 	 * @param string $extension_name
@@ -97,7 +122,7 @@ class WpLicenseAPI
 		$headers     = [ 'Accept' => 'application/json' ];
 		$query_array = [ 'extension_name' => $extension_name, 'license_key' => $license_key ];
 		$query       = http_build_query( $query_array );
-		$response    = Requests::get( $this->endpoint . '/licenses/valid/?' . $query, $headers, $this->options );
+		$response    = Requests::get( $this->endpoint . '/licenses/'.$extension_name.'/?' . $query, $headers, $this->options );
 
 		return $response;
 	}
