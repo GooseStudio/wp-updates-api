@@ -21,7 +21,7 @@ class WpLicenseAPI
 	 */
 	public function __construct( $endpoint, $options = null ) {
 		$this->options  = $options;
-		$this->endpoint = $endpoint;
+		$this->endpoint = rtrim( $endpoint, '/');
 	}
 
 	/**
@@ -63,7 +63,6 @@ class WpLicenseAPI
 		$query_array = ['extensions' => $extensions];
 		$query       = http_build_query( $query_array );
 		$response    = Requests::get( $this->endpoint . '/licenses/?' . $query, $headers, $this->options );
-
 		if ( $response->success ) {
 			$result = json_decode( $response->body, true );
 			$all = [];
@@ -105,6 +104,27 @@ class WpLicenseAPI
 	public function register_license_key( $extension_name, $license_key, $url ) {
 		$headers     = [ 'Accept' => 'application/json' ];
 		$query_array = [ 'extension_name' => $extension_name, 'license_key' => $license_key, 'site' => $url ];
+		$response    = Requests::post( $this->endpoint . '/licenses/', $headers, $query_array, $this->options );
+		if ( $response->success ) {
+			return json_decode( $response->body, true );
+		}
+		throw new WpUpdatesAPIException( $response->body, $response->status_code );
+	}
+	/**
+	 * Register license for the provided site url
+	 *
+	 * @param array $extensions The plugin or theme that the license belongs to
+	 * @param string $url The url to register the license to
+	 *
+	 * @return array
+	 * @throws WpUpdatesAPIException
+	 */
+	public function register_license_keys( $extensions, $url ) {
+		$headers     = [ 'Accept' => 'application/json' ];
+		$site_data = new SiteData();
+		$data = $site_data->get_data();
+		$query_array = ['extensions' => $extensions, 'site' => $url ];
+		$query_array = array_merge($query_array, $data);
 		$response    = Requests::post( $this->endpoint . '/licenses/', $headers, $query_array, $this->options );
 		if ( $response->success ) {
 			return json_decode( $response->body, true );
