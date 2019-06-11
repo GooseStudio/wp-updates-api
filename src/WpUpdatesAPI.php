@@ -4,6 +4,7 @@ namespace GooseStudio\WpUpdatesAPI;
 
 use Requests;
 
+
 class WpUpdatesAPI {
 	/**
 	 * @var array
@@ -90,7 +91,8 @@ class WpUpdatesAPI {
 	 * @return array
 	 */
 	public function query_array( $extension_name, $license_key ) {
-		global $wp_version, $wpdb;
+		global $wp_version, $wpdb, $wp_local_package;
+		/** @noinspection PhpIncludeInspection */
 		include ABSPATH . WPINC . '/version.php';
 		$php_version = PHP_VERSION;
 
